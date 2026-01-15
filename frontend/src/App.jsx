@@ -4,18 +4,20 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeDashboard from './pages/EmployeeDashboard';
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminSummery from './components/dashboard/AdminSummery';
+import DepartmentList from './components/Department/DepartmentList';
 
 function App() {
   return (
     <Routes>
 
-      {/* Default route */}
+      {/* Default */}
       <Route path="/" element={<Navigate to="/login" />} />
 
-      {/* Login page (public) */}
+      {/* Login */}
       <Route path="/login" element={<Login />} />
 
-      {/* Protected dashboards */}
+      {/* Admin dashboard with nested routes */}
       <Route
         path="/admin-dashboard"
         element={
@@ -23,8 +25,13 @@ function App() {
             <AdminDashboard />
           </ProtectedRoute>
         }
-      />
+      >
+        {/* DEFAULT ADMIN PAGE */}
+        <Route index element={<AdminSummery />} />
+        <Route path="/admin-dashboard/departments" element={<DepartmentList/>} />
+      </Route>
 
+      {/* Employee dashboard */}
       <Route
         path="/employee-dashboard"
         element={
@@ -33,6 +40,9 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/login" />} />
 
     </Routes>
   );
