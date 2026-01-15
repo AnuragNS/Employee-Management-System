@@ -3,27 +3,45 @@ import bcrypt from 'bcrypt';
 import User from './models/User.js';
 import connectToDatabase from './db/db.js';
 
-const seedAdmin = async () => {
+const seedUsers = async () => {
   try {
     await connectToDatabase();
 
-    const existingUser = await User.findOne({ email: "admin@gmail.com" });
+    const users = [
+      {
+        name: "Admin",
+        email: "admin@gmail.com",
+        password: "admin",
+        role: "admin"
+      },
+      {
+        name: "Employee",
+        email: "employee@gmail.com",
+        password: "employee",
+        role: "employee"
+      }
+    ];
 
-    if (existingUser) {
-      console.log("Admin user already exists");
-      process.exit(0);
+    for (const user of users) {
+      const existingUser = await User.findOne({ email: user.email });
+
+      if (existingUser) {
+        console.log(`${user.role} already exists`);
+        continue;
+      }
+
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+
+      await User.create({
+        name: user.name,
+        email: user.email,
+        password: hashedPassword,
+        role: user.role
+      });
+
+      console.log(`${user.role} created successfully`);
     }
 
-    const hashedPassword = await bcrypt.hash("admin", 10);
-
-    await User.create({
-      name: "Admin",
-      email: "admin@gmail.com",
-      password: hashedPassword,
-      role: "admin"
-    });
-
-    console.log("Admin user created successfully");
     process.exit(0);
 
   } catch (error) {
@@ -32,4 +50,4 @@ const seedAdmin = async () => {
   }
 };
 
-seedAdmin();
+seedUsers();

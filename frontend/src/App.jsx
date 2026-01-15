@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeDashboard from './pages/EmployeeDashboard';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -11,12 +12,27 @@ function App() {
       {/* Default route */}
       <Route path="/" element={<Navigate to="/login" />} />
 
-      {/* Auth */}
+      {/* Login page (public) */}
       <Route path="/login" element={<Login />} />
 
-      {/* Dashboards */}
-      <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+      {/* Protected dashboards */}
+      <Route
+        path="/admin-dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/employee-dashboard"
+        element={
+          <ProtectedRoute>
+            <EmployeeDashboard />
+          </ProtectedRoute>
+        }
+      />
 
     </Routes>
   );
