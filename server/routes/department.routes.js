@@ -1,9 +1,13 @@
 import express from 'express';
+
 import { createDepartment, getDepartments } from '../controllers/Department.controller.js';
 
 const router = express.Router();
 
-router.post('/', createDepartment);
-router.get('/', getDepartments);
+// Create department (protected route)
+router.post('/',  createDepartment);
+
+// Get all departments
+router.get('/',  getDepartments);
 
 export default router;

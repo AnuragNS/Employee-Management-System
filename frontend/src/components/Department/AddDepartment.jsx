@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const AddDepartment = () => {
   const [department, setDepartment] = useState({
-    dep_name: '',
+    name: '',
     description: ''
   });
 
@@ -20,23 +20,20 @@ const AddDepartment = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/department/add',
-        department,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        }
+        'http://localhost:5000/api/departments',
+        department
       );
 
-      if (response.data.success) {
+      if (response.status === 201) {
+        alert("Department Added Successfully");
         navigate('/admin-dashboard/departments');
       }
+
     } catch (error) {
-      if (error.response && error.response.data.error) {
-        alert(error.response.data.error);
+      if (error.response) {
+        alert(error.response.data.message);
       } else {
-        alert('Something went wrong');
+        alert('Server not responding');
       }
     }
   };
@@ -58,8 +55,8 @@ const AddDepartment = () => {
             </label>
             <input
               type="text"
-              name="dep_name"
-              value={department.dep_name}
+              name="name"
+              value={department.name}
               onChange={handleChange}
               placeholder="Enter Department Name"
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
