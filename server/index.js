@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/auth.js';
 import connectToDatabase from './db/db.js'; // Your DB connection file
+import departmentRouter from './routes/department.routes.js';
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/departments', departmentRouter);
+
 
 // Default route
 app.get('/', (req, res) => res.send('Server running'));
