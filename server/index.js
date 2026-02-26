@@ -4,13 +4,17 @@ import cors from 'cors';
 
 import connectToDatabase from './db/db.js';
 import departmentRouter from './routes/department.routes.js';
+import authRouter from './routes/auth.js';   // MUST exist
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// ✅ AUTH ROUTE
+app.use('/api/auth', authRouter);
+
+// Departments
 app.use('/api/departments', departmentRouter);
 
 app.get('/', (req, res) => {
@@ -20,13 +24,10 @@ app.get('/', (req, res) => {
 const startServer = async () => {
   try {
     await connectToDatabase();
-
     const PORT = process.env.PORT || 5000;
-
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
-
   } catch (error) {
     console.error('Server start error:', error.message);
     process.exit(1);

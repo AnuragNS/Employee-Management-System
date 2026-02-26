@@ -14,21 +14,23 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
-        { email, password }
+        { 
+          email: email.trim().toLowerCase(), 
+          password 
+        }
       );
 
-      if (response.data.success) {
-        // Save user in context
-        login(response.data.user);
+      console.log("Login response:", response.data);
 
-        // Save token
+      if (response.data.success) {
+        login(response.data.user);
         localStorage.setItem("token", response.data.token);
 
-        // Redirect based on role
         if (response.data.user.role === "admin") {
           navigate('/admin-dashboard');
         } else {
@@ -37,11 +39,10 @@ export default function Login() {
       }
 
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
-        setError(error.response.data.error);
-      } else {
-        setError("Use a valid email address");
-      }
+      console.log("Full login error:", error);
+
+      // Show actual backend error message
+      setError(error.response?.data?.error || "Server error");
     }
   };
 
@@ -65,6 +66,7 @@ export default function Login() {
               type="email"
               placeholder="Enter Email"
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -76,12 +78,14 @@ export default function Login() {
               type="password"
               placeholder="********"
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
           <button
+            type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
             Login
