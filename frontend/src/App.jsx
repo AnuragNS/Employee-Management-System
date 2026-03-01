@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminSummery from './components/dashboard/AdminSummery';
 import DepartmentList from './components/Department/DepartmentList';
 import AddDepartment from './components/Department/AddDepartment';
+import EditDepartment from './components/Department/EditDepartment';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route index element={<AdminSummery />} />
         <Route path="/admin-dashboard/departments" element={<DepartmentList/>} />
          <Route path="/admin-dashboard/add-department" element={<AddDepartment/>} />
+          <Route path="/admin-dashboard/department/:id" element={<EditDepartment/>} />
       </Route>
 
       {/* Employee dashboard */}
